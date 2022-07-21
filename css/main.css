@@ -1,6 +1,5 @@
 body{
-    /* background-color: rgba(0, 0, 0, 0.8); */
-    background-image: url('/img/background.jpg');
+    background-image: url(/img/background.jpg);
     background-size: 100%;
     background-position: 50% 33%
 
