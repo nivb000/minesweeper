@@ -1,0 +1,96 @@
+body{
+    /* background-color: rgba(0, 0, 0, 0.8); */
+    background-image: url(/img/background.jpg);
+    background-size: 100%;
+    background-position: 50% 33%
+
+}
+h1{
+    width: 400px;
+    background-color: rgb(222, 222, 26);
+    color: rgb(97, 125, 239);
+}
+.game-container{
+    padding-top: 45px;
+}
+.game-ui{
+    width: 100%;
+    text-align: center;
+}
+.game-ui .lives{
+    display: inline-block;
+    font-size: 20px;
+    margin: 0;
+}
+.smile{
+    display: inline;
+    margin: 0 15px;
+    font-size: 35px;
+    cursor: pointer;
+    border: 1px solid rgb(97, 125, 239);
+    background-color: rgb(222, 222, 26);
+}
+
+.timer{
+    display: inline-block;
+    padding: 5px;
+    color: red;
+    background-color: rgb(222, 222, 26);
+    font-size: 20px;
+}
+table{
+   text-align: center;
+   margin: auto;
+   border: 5px solid rgb(222, 222, 26);
+   padding: 5px;
+}
+.cell{
+    height: 40px; 
+    width: 40px;
+    text-align: center;
+    background-color: rgb(97, 125, 239);
+    cursor: crosshair;
+}
+.cell:hover{background-color: rgb(66, 66, 250);}
+.cell img {height: 27px;}
+.clickedCell{background-color: rgb(154, 154, 154);}
+.flagged img{width: 37px; height: 37px;}
+
+.levels{
+    text-align: center;
+}
+.levels p{
+    color: aliceblue;
+    font-size: 25px;
+    margin: auto;
+}
+.levels .safe-click{
+    display: block;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+.levels button{
+    display: inline;
+    width: 150px;
+    height: 50px;
+    margin: 7px auto;
+    background-color: rgb(222, 222, 26);
+    border-radius: 10px;
+    border: 0;
+    cursor: pointer;
+}
+.levels button:hover{
+    background-color: rgb(97, 125, 239);
+    color: aliceblue;
+}
+
+.footer{
+    display: block;
+    text-align: center;
+    color: aliceblue;
+    margin-bottom: 5px;
+    margin-top: 75px;
+}
+.footer a{
+    color: aliceblue;
+}
