@@ -29,7 +29,14 @@ h1{
     border: 1px solid rgb(97, 125, 239);
     background-color: rgb(222, 222, 26);
 }
-
+.timers{
+    margin: 0;
+}
+.best-score{
+    display: inline;
+    padding: 15px;
+    color: aliceblue;
+}
 .timer{
     display: inline-block;
     padding: 5px;

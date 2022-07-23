@@ -4,17 +4,22 @@
 const MINE = `<img src="img/mine.png">`
 const FLAG = `<img src="img/flag.png">`
 
-var gLevel = {
-    SIZE: 4,
-    MINES: 2,
-    FLAGS: 2
-}
+var gLevel
 var gGame
 var gBoard
 var gClickedCounter
-var elSmile = document.querySelector(".smile")
+var gBestMin = 59
+var gBestSec = 59
 
-function initGame() {
+var elSmile = document.querySelector(".smile")
+var elBest = document.querySelector(".game-container .timers .best-score")
+
+
+function initGame(size,mines) {
+    gLevel = {
+        SIZE: size,
+        MINES: mines,
+    }
     gGame = {
         isOn: true,
         shownCount: 0,
@@ -30,6 +35,7 @@ function initGame() {
     renderLives()
     renderSafeClicks()
     elSmile.innerHTML = '😀'
+    elBest.innerText = localStorage.getItem("BestTime")
 }
 
 
@@ -86,7 +92,7 @@ function clickedCell(i, j, elCell) {
     //Make sure First Click is not a mine
     if (gClickedCounter === 1) {
         for (let i = 0; i < gLevel.MINES; i++) {
-            gBoard[getRandomInt(0, gLevel.SIZE)][getRandomInt(0, gLevel.SIZE)].isMine = true
+            gBoard[getRandomInt(0, gLevel.SIZE - 1)][getRandomInt(0, gLevel.SIZE - 1)].isMine = true
             boardNeighbors(gBoard)
         }
         startTimer()
@@ -95,18 +101,20 @@ function clickedCell(i, j, elCell) {
 
     var currCell = gBoard[i][j]
 
+    currCell.isShown = true
+    gGame.shownCount++
+    
     if (currCell.isMine) {
         renderCell({ i, j }, MINE)
         gGame.lives--
-        gLevel.FLAGS--
+        gLevel.MINES--
         renderLives()
         checkEndGame()
         return
     }
+    
 
-    currCell.isShown = true
     renderCell({ i, j }, currCell.minesAroundCount)
-    gGame.shownCount++
 
 
     if (currCell.minesAroundCount === 0 && !currCell.isMine) {
@@ -121,28 +129,31 @@ function clickedCell(i, j, elCell) {
 function toggleFlag(i, j, elCell) {
 
     var currCell = gBoard[i][j]
-    currCell.isMarked = !currCell.isMarked
+    // currCell.isMarked = !currCell.isMarked
+
+    if (currCell.isShown) return
 
 
-    if (!currCell.isMarked) {
+    if (currCell.isMarked && !currCell.isShown) {
         elCell.classList.remove("flagged")
-        renderCell({ i, j }, "")
-        gGame.markedCount--
         currCell.isMarked = false
+        gGame.markedCount--
+        renderCell({ i, j }, "")
         return
     }
 
     // must be before trying to add but after trying to remove
-    if (gGame.markedCount === gLevel.FLAGS) {
+    if (gGame.markedCount === gLevel.MINES) {
         return
     }
 
-    if (currCell.isMarked && !currCell.isShown || 
-        currCell.isMarked && currCell.isShown) {
+    currCell.isMarked = true
+
+    if (currCell.isMarked && !currCell.isShown) {
         elCell.classList.add("flagged")
-        renderCell({ i, j }, FLAG)
         gGame.markedCount++
         currCell.isMarked = true
+        renderCell({ i, j }, FLAG)
         checkEndGame()
         return
     }
@@ -178,22 +189,25 @@ function checkEndGame() {
         return
     }
 
-    if (gGame.shownCount === (gLevel.SIZE ** 2 - gLevel.MINES) &&
-        gGame.markedCount === gLevel.FLAGS) {
+    if (gGame.shownCount === (gLevel.SIZE ** 2 - gGame.markedCount) &&
+        gGame.markedCount === gLevel.MINES){
         gGame.isOn = false
         stopTimer()
+        bestScore()
         elSmile.innerHTML = "😎"
     }
+
 }
 
-function levels(level, mines) {
-
-
-    gLevel.SIZE = level
-    gLevel.MINES = mines
-    gLevel.FLAGS = gLevel.MINES
-    initGame()
-
+function bestScore() {
+    if(gMin < gBestMin){
+        gBestMin = gMin
+        gBestSec = gSec
+    } else{
+        gBestSec = gSec
+    }
+    var bestScore = `${gBestMin}:${gBestSec}`
+    localStorage.setItem("BestTime", bestScore);  
 }
 
 function renderLives() {
@@ -217,7 +231,7 @@ function renderLives() {
 
 function safeClick() {
 
-    if(gGame.safeClicks === 0) return
+    if (gGame.safeClicks === 0) return
 
     gGame.safeClicks--
 
